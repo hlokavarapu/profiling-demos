@@ -9,8 +9,9 @@ General notes
 
  - ideally you want to profile optimized builds only
  - little to no overhead: otherwise you measure the wrong thing
- - what granularity? Need individiual processor behavior?
- - there is "too much information"!
+ - what granularity? Need individiual processor behavior? per function? per line?
+ - how easy do you want it to be? always enabled?!
+ - there can be "too much information"!
    
 deal.II TimerOutput / Timer
 ---------------------------
@@ -19,11 +20,11 @@ deal.II TimerOutput / Timer
   - see ``step-40/``:
     ```
 	{
-            TimerOutput::Scope t(computing_timer, "setup");
+	    TimerOutput::Scope t(computing_timer, "setup");
 	    // do something.
 	}
     ```
-  - will contain two MPI_Barriers to compute the maximum time
+  - will contain two ``MPI_Barriers`` to compute the maximum time
   - generates summary at the end:
     ```
     +---------------------------------------------+------------+------------+
@@ -37,7 +38,6 @@ deal.II TimerOutput / Timer
     | setup                           |         1 |      1.65s |        21% |
     | solve                           |         1 |     0.524s |       6.6% |
     +---------------------------------+-----------+------------+------------+
-
     ```
   - manual computation example: see ``MinMaxAvg`` in ``step-40/``
 
@@ -73,8 +73,9 @@ Parallel Trace Event Logging
 ----------------------------
    
   - see ``trace-events/``
-  - use event log to generate events
-  - concat files using ``python plot.py event.json.* >out.json
+  - manually generate events: ``EventLog::Scope e(eventlog, "vmult_interface_down");``
+  - works in optimized mode, very performant, no communication overhead
+  - concat files using ``python plot.py event.json.* >out.json``
   - visualize in chrome/chromium ``chrome://tracing``
 
 Other options
