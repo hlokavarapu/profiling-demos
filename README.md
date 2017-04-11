@@ -24,7 +24,21 @@ deal.II TimerOutput / Timer
 	}
     ```
   - will contain two MPI_Barriers to compute the maximum time
-  - generates summary at the end
+  - generates summary at the end:
+    ```
+    +---------------------------------------------+------------+------------+
+    | Total wallclock time elapsed since start    |      7.95s |            |
+    |                                             |            |            |
+    | Section                         | no. calls |  wall time | % of total |
+    +---------------------------------+-----------+------------+------------+
+    | assembly                        |         1 |       1.7s |        21% |
+    | output                          |         1 |     0.725s |       9.1% |
+    | refine                          |         1 |      3.34s |        42% |
+    | setup                           |         1 |      1.65s |        21% |
+    | solve                           |         1 |     0.524s |       6.6% |
+    +---------------------------------+-----------+------------+------------+
+
+    ```
   - manual computation example: see ``MinMaxAvg`` in ``step-40/``
 
 Simple mpi command profiling
@@ -69,10 +83,10 @@ Other options
 1. valgrind with tool kcachegrind
    - release mode but with ``-g``
    - can run in parallel (but doesn't help with timing)
-   - line by line performance counters!
-   - very slow, no measurement error!
-   - run with ``mpirun -n 2 valgrind --tools=cachegrind ./step-40``
-   - visualize: 
+   - line by line performance counters, individual instructions!
+   - very slow, but no measurement error
+   - run with ``mpirun -n 2 valgrind --tools=callgrind ./step-40``
+   - visualize: ``kcachegrind callgrind.out.<id>``
 
 2. gprof profiling
    - see https://web.eecs.umich.edu/~sugih/pointers/gprof_quick.html
