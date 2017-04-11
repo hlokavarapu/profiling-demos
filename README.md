@@ -15,7 +15,7 @@ General notes
 deal.II TimerOutput / Timer
 ---------------------------
 
-  - defined section
+  - define section in code that are timed
   - see ``step-40/``:
     ```
 	{
@@ -24,6 +24,7 @@ deal.II TimerOutput / Timer
 	}
     ```
   - will contain two MPI_Barriers to compute the maximum time
+  - generates summary at the end
   - manual computation example: see ``MinMaxAvg`` in ``step-40/``
 
 Simple mpi command profiling
@@ -48,43 +49,48 @@ Simple mpi command profiling
 
 Parallel tracing with hpc-toolkit
 ---------------------------------
-   - Needs compiler wrappers
-   - hard to setup
+   - Needs compiler wrappers, so some work to setup
    - parallel traces of every function call for each processor
    - has overhead
    - examples: https://wiki.mpich.org/mpich/images/f/ff/HpctkAMRTrace.png
 
 
-
 Parallel Trace Event Logging
 ----------------------------
    
-  see ``trace-events/``
+  - see ``trace-events/``
   - use event log to generate events
   - concat files using ``python plot.py event.json.* >out.json
-  - visualize in chrome/chromium chrome://tracing
-
+  - visualize in chrome/chromium ``chrome://tracing``
 
 Other options
 -------------
 
 1. valgrind with tool kcachegrind
    - release mode but with ``-g``
-   - not parallel, very slow, no measurement error!
+   - can run in parallel (but doesn't help with timing)
+   - line by line performance counters!
+   - very slow, no measurement error!
    - run with ``mpirun -n 2 valgrind --tools=cachegrind ./step-40``
    - visualize: 
 
-2. g++ profiling
+2. gprof profiling
+   - see https://web.eecs.umich.edu/~sugih/pointers/gprof_quick.html
    - compile with -g
-   - run
-   - visualize with kcachegrind
-   - not parallel
+   - run using ``gprof``, visualize with kcachegrind
+   - not in parallel?!
 
 3. tau toolkit
    - complicated and hard to install
    - https://www.cs.uoregon.edu/research/tau/home.php
 
-4. 
+4. Serial and reproducible instruction counting
+   - https://github.com/tjhei/callgrind-wrapper
+   - see https://doi.org/10.6084/m9.figshare.4696450
+   - works like dealii::TimerOutput
+   - computes reproducible instruction counts for manually declared sections
+   - works inside callgrind
+
 
 
 Timo Heister, timo.heister@gmail.com
