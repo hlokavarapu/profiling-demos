@@ -4,39 +4,13 @@ Profiling Demos
 This is a collection of demos on how to do generate performance captures
 (profiling) of c++ code.
 
+General notes
+-------------
 
-- 
-deal.II TimerOutput
-
-   MPI_Barrier  
-   start timing
-
-   your code
-
-   mpi_Barrier
-   stop()
-
- 
-///
-  Timer timer;
-
-  timer.start();
-
-  // do something
-
-  timer.stop();
-  double time = timer();
-  MinMaxAvg data = Utilities::MPI::min_max_avg(time, MPI_COMM_WORLD);
-  data.min, data.max
-
-2. g++ profiling
-   - compile with -g
-   - run
-   - visualize with kcachegrind
-   not parallel
-
-3. valgrind with tool kcachegrind
-   not parallel
+ - ideally you want to profile optimized builds only
+ - little to no overhead: otherwise you measure the wrong thing
+ - what granularity? Need individiual processor behavior?
+ - there is "too much information"!
    
 deal.II TimerOutput / Timer
 ---------------------------
@@ -56,7 +30,7 @@ Simple mpi command profiling
 ----------------------------
 
   - see http://ipm-hpc.sourceforge.net/
-  - examples: http://ipm-hpc.sourceforge.net/images/mpi_stack_byrank_16k.png
+  - examples: http://ipm-hpc.sourceforge.net/examples/ex2/ http://ipm-hpc.sourceforge.net/images/mpi_stack_byrank_16k.png
   - simple to install and use
   - only MPI statistics and from sections created manually
   - can link to PAPI for performance counters
@@ -91,9 +65,26 @@ Parallel Trace Event Logging
   - visualize in chrome/chromium chrome://tracing
 
 
+Other options
+-------------
 
+1. valgrind with tool kcachegrind
+   - release mode but with ``-g``
+   - not parallel, very slow, no measurement error!
+   - run with ``mpirun -n 2 valgrind --tools=cachegrind ./step-40``
+   - visualize: 
 
+2. g++ profiling
+   - compile with -g
+   - run
+   - visualize with kcachegrind
+   - not parallel
 
+3. tau toolkit
+   - complicated and hard to install
+   - https://www.cs.uoregon.edu/research/tau/home.php
+
+4. 
 
 
 Timo Heister, timo.heister@gmail.com
