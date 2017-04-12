@@ -83,6 +83,7 @@ Other options
 
 1. valgrind with tool kcachegrind
    - release mode but with ``-g``
+   - you can recompile deal.II by specifying ``-DDEAL_II_CXX_FLAGS_RELEASE="-g"`` in the cmake options.
    - can run in parallel (but doesn't help with timing)
    - line by line performance counters, individual instructions!
    - very slow, but no measurement error
